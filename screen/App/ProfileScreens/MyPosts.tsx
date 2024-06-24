@@ -35,9 +35,8 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
     '🚀 ~ file: MyPosts.tsx:30 ~ MyPosts ~ postRes:',
     postRes.isLoading
   );
-
   const renderFooter = () => {
-    if (posts.length === 0 && !postRes.isLoading)
+    if (posts?.length === 0 && !postRes.isLoading)
       return (
         <View
           style={{
@@ -50,7 +49,7 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
           <Text>No post </Text>
         </View>
       );
-    if (postRes.isLoading || isLoading) {
+    if (postRes.isLoading) {
       return (
         <View
           style={{
