@@ -1,20 +1,20 @@
-import { View, Animated as NativeAnimated } from "react-native";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { View, Animated as NativeAnimated, Text } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import PostBuilder from "../../../components/home/post/PostBuilder";
+import PostBuilder from '../../../components/home/post/PostBuilder';
 
-import useGetMode from "../../../hooks/GetMode";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import useGetMode from '../../../hooks/GetMode';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks';
 
-import { ActivityIndicator } from "react-native-paper";
-import { IPost } from "../../../types/api";
+import { ActivityIndicator } from 'react-native-paper';
+import { IPost } from '../../../types/api';
 import {
   useLazyGetGuestPostsQuery,
   useLazyGetMyPostsQuery,
-} from "../../../redux/api/services";
-import { openToast } from "../../../redux/slice/toast/toast";
+} from '../../../redux/api/services';
+import { openToast } from '../../../redux/slice/toast/toast';
 
-import Bio from "../../../components/profilePeople/Bio";
+import Bio from '../../../components/profilePeople/Bio';
 
 export default function PeoplePosts({
   offset,
@@ -35,7 +35,7 @@ export default function PeoplePosts({
   const dispatch = useAppDispatch();
   const authId = useAppSelector((state) => state.user.data?.id);
   const isDark = dark;
-  const color = isDark ? "white" : "black";
+  const color = isDark ? 'white' : 'black';
 
   const [skip, setSkip] = useState(0);
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -45,14 +45,27 @@ export default function PeoplePosts({
   const [getLazyPost, postRes] = useLazyGetGuestPostsQuery();
 
   const renderFooter = () => {
+    if (posts.length === 0 && !postRes.isLoading)
+      return (
+        <View
+          style={{
+            marginTop: 20,
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text>No post </Text>
+        </View>
+      );
     if (postRes.isLoading) {
       return (
         <View
           style={{
             marginTop: 20,
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <ActivityIndicator color={color} size={20} />

@@ -1,12 +1,13 @@
-import { View, Text, Pressable } from "react-native";
-import React from "react";
+import { View, Text, Pressable } from 'react-native';
+import React from 'react';
 
-import useGetMode from "../../../hooks/GetMode";
-import Animated, { FadeInLeft, FadeOutLeft } from "react-native-reanimated";
-import { useNavigation } from "@react-navigation/native";
-import { HomeNavigationProp } from "../../../types/navigation";
-import { ActivityIndicator } from "react-native-paper";
-import { Image } from "expo-image";
+import useGetMode from '../../../hooks/GetMode';
+import Animated, { FadeInLeft, FadeOutLeft } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+import { HomeNavigationProp } from '../../../types/navigation';
+import { ActivityIndicator } from 'react-native-paper';
+import { Image } from 'expo-image';
+import { ProfileIcon } from '../../icons';
 
 export default function AvatarName({
   userName,
@@ -20,14 +21,13 @@ export default function AvatarName({
   receiverId: string;
 }) {
   const dark = useGetMode();
-  const color = dark ? "#FFFFFF" : "#000000";
+  const color = dark ? '#FFFFFF' : '#000000';
   const navigation = useNavigation<HomeNavigationProp>();
   return (
     <>
-   
       <Pressable
         onPress={() =>
-          navigation.navigate("ChatScreen", {
+          navigation.navigate('ChatScreen', {
             id: id,
             receiverId,
             name: userName,
@@ -39,18 +39,23 @@ export default function AvatarName({
           entering={FadeInLeft.springify()}
           exiting={FadeOutLeft.springify()}
           style={{
-            justifyContent: "center",
+            justifyContent: 'center',
             width: 100,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
-          <Image
-            style={{ borderRadius: 9999, height: 65, width: 65 }}
-            source={{ uri: imageUri }}
-          />
+          {imageUri ? (
+            <Image
+              style={{ borderRadius: 9999, height: 65, width: 65 }}
+              source={{ uri: imageUri }}
+            />
+          ) : (
+            <ProfileIcon size={60} color={color} />
+          )}
+
           <Text
             numberOfLines={1}
-            style={{ fontFamily: "jakara", fontSize: 16, color }}
+            style={{ fontFamily: 'jakara', fontSize: 16, color }}
           >
             @{userName}
           </Text>

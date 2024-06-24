@@ -1,7 +1,8 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import * as Haptics from "expo-haptics";
-import { Platform } from "react-native";
+import * as Haptics from 'expo-haptics';
+import { Platform } from 'react-native';
+import { IMessageSocket } from '../../../types/socket';
 const ONE_SECOND_IN_MS = 1000;
 
 const PATTERN = [
@@ -10,18 +11,20 @@ const PATTERN = [
   3 * ONE_SECOND_IN_MS,
 ];
 const PATTERN_DESC =
-  Platform.OS === "android"
-    ? "wait 1s, vibrate 2s, wait 3s"
-    : "wait 1s, vibrate, wait 2s, vibrate, wait 3s";
+  Platform.OS === 'android'
+    ? 'wait 1s, vibrate 2s, wait 3s'
+    : 'wait 1s, vibrate, wait 2s, vibrate, wait 3s';
 export type ToastState = {
   text: string | null;
   imageUri?: string;
+  chatId?: string;
+  message?: IMessageSocket;
   open: boolean;
-  type: "Failed" | "Success" | "Info" | "Message" | null;
+  type: 'Failed' | 'Success' | 'Info' | 'Message' | null;
 };
 
 const toastSlice = createSlice({
-  name: "Toast",
+  name: 'Toast',
   initialState: {
     text: null,
     open: false,
@@ -32,8 +35,15 @@ const toastSlice = createSlice({
       state,
       action: PayloadAction<{
         text: string;
+        message: {
+          sender: { userName: string; id: string };
+          text: string;
+          id: string;
+          createdAt: string;
+        };
+        chatId: string;
         imageUri?: string;
-        type: "Failed" | "Success" | "Info" | "Message";
+        type: 'Failed' | 'Success' | 'Info' | 'Message';
       }>
     ) => {
       state.open = true;

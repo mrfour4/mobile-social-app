@@ -7,9 +7,9 @@ import {
   StyleProp,
   RegisteredStyle,
   ViewStyle,
-} from "react-native";
-import React from "react";
-import useGetMode from "../../../hooks/GetMode";
+} from 'react-native';
+import React from 'react';
+import useGetMode from '../../../hooks/GetMode';
 
 export default function InputText({
   props,
@@ -20,20 +20,20 @@ export default function InputText({
 }) {
   const dark = useGetMode();
   const isDark = dark;
-  const backgroundColor = isDark ? "#292828" : "#f1f1f1";
-  const color = isDark ? "white" : "black";
-  const placeholderColor = isDark ? "#959595" : "#393939";
+  const backgroundColor = isDark ? '#292828' : '#f1f1f1';
+  const color = isDark ? 'white' : 'black';
+  const placeholderColor = isDark ? '#959595' : '#393939';
   return (
     <View
       style={[
         {
-          width: "100%",
+          width: '100%',
           height: 50,
           paddingHorizontal: 20,
           borderRadius: 10,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           backgroundColor,
         },
         style,
@@ -45,11 +45,11 @@ export default function InputText({
         placeholderTextColor={placeholderColor}
         style={[
           {
-            width: "90%",
-            height: "100%",
+            width: '90%',
+            height: '100%',
             fontSize: 16,
             color,
-            fontFamily: "jakara",
+            fontFamily: 'jakara',
             includeFontPadding: false,
           },
         ]}
@@ -57,17 +57,17 @@ export default function InputText({
       />
       <View
         style={{
-          width: "10%",
-          height: "100%",
+          width: '10%',
+          height: '100%',
 
-          alignItems: "center",
+          alignItems: 'center',
           paddingBottom: 10,
-          justifyContent: "center",
+          justifyContent: 'center',
         }}
       >
         <Text
           style={{
-            fontFamily: "jakara",
+            fontFamily: 'jakara',
             color,
             fontSize: 25,
             includeFontPadding: false,

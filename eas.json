@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 3.13.3"
+    "version": ">= 10.0.2"
   },
   "build": {
     "development": {
@@ -11,6 +11,10 @@
       "distribution": "internal"
     },
     "production": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://77.37.47.87:8080",
+        "EXPO_PUBLIC_PROJECT_ID": "e618bb47-6149-4585-8cc8-884c5992795e"
+      },
       "android": {
         "buildType": "apk"
       }

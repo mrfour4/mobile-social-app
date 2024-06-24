@@ -1,25 +1,25 @@
-import { View, Dimensions, Pressable } from "react-native";
+import { View, Dimensions, Pressable } from 'react-native';
 
-import ProfileImage from "./components/ProfileImage";
-import NameAndTag from "./components/NameAndTag";
-import TextPost from "./components/TextPost";
-import PhotoPost from "./components/PhotoPost";
-import VideoPost from "./components/VideoPost";
-import Engagements from "./components/Engagements";
-import useGetMode from "../../../hooks/GetMode";
-import AudioPost from "./components/AudioPost";
-import { IPostBuilder } from "../../../types/app";
-import { ProfileIcon } from "../../icons";
-import { useNavigation } from "@react-navigation/native";
-import { HomeNavigationProp } from "../../../types/navigation";
-import { dateAgo } from "../../../util/date";
-import { useAppSelector } from "../../../redux/hooks/hooks";
-import LinkPost from "./components/LinkPost";
-import ViewShot from "react-native-view-shot";
-import { useRef, useState } from "react";
-import Share from "react-native-share";
-import { Button, Menu, Divider, PaperProvider } from "react-native-paper";
-import Animated, { SlideOutRight } from "react-native-reanimated";
+import ProfileImage from './components/ProfileImage';
+import NameAndTag from './components/NameAndTag';
+import TextPost from './components/TextPost';
+import PhotoPost from './components/PhotoPost';
+import VideoPost from './components/VideoPost';
+import Engagements from './components/Engagements';
+import useGetMode from '../../../hooks/GetMode';
+import AudioPost from './components/AudioPost';
+import { IPostBuilder } from '../../../types/app';
+import { ProfileIcon } from '../../icons';
+import { useNavigation } from '@react-navigation/native';
+import { HomeNavigationProp } from '../../../types/navigation';
+import { dateAgo } from '../../../util/date';
+import { useAppSelector } from '../../../redux/hooks/hooks';
+import LinkPost from './components/LinkPost';
+import ViewShot from 'react-native-view-shot';
+import { useRef, useState } from 'react';
+import Share from 'react-native-share';
+import { Button, Menu, Divider, PaperProvider } from 'react-native-paper';
+import Animated, { SlideOutRight } from 'react-native-reanimated';
 export default function PostBuilder({
   imageUri,
   name,
@@ -45,21 +45,21 @@ export default function PostBuilder({
   deletePost,
   photo,
 }: IPostBuilder) {
-  const width = Dimensions.get("window").width;
+  const width = Dimensions.get('window').width;
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;
-  const backgroundColor = isDark ? "black" : "white";
-  const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
-  const color = isDark ? "#FFFFFF" : "#000000";
-  const rColor = isDark ? "#00000014" : "#BBBBBB";
+  const backgroundColor = isDark ? 'black' : 'white';
+  const borderBottomColor = isDark ? '#252222' : '#CCC9C9';
+  const color = isDark ? '#FFFFFF' : '#000000';
+  const rColor = isDark ? '#00000014' : '#BBBBBB';
   const user = useAppSelector((state) => state.user.data);
   const ref = useRef<any>(null);
 
   const handleShare = () => {
-    console.log("shared");
+    console.log('shared');
     ref?.current?.capture()?.then((uri: string) => {
-      console.log("do something with ", uri);
+      console.log('do something with ', uri);
       Share.open({ urls: [uri] })
         .then((res) => {
           console.log(res);
@@ -71,7 +71,7 @@ export default function PostBuilder({
   };
 
   return (
-    <ViewShot ref={ref} options={{ fileName: id, format: "jpg", quality: 0.9 }}>
+    <ViewShot ref={ref} options={{ fileName: id, format: 'jpg', quality: 0.9 }}>
       <Animated.View
         exiting={SlideOutRight.springify()}
         style={{
@@ -81,7 +81,7 @@ export default function PostBuilder({
       >
         <Pressable
           onPress={() => {
-            navigation.navigate("ViewPost", {
+            navigation.navigate('ViewPost', {
               id,
               date,
               imageUri,
@@ -110,8 +110,8 @@ export default function PostBuilder({
         >
           <View
             style={{
-              flexDirection: "row",
-              width: "100%",
+              flexDirection: 'row',
+              width: '100%',
               gap: 10,
               padding: 10,
               backgroundColor,
@@ -121,16 +121,16 @@ export default function PostBuilder({
               style={{
                 height: 50,
                 width: 50,
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: 'center',
+                alignItems: 'center',
                 borderRadius: 9999,
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <Pressable
                 onPress={() => {
                   userId && userId !== user?.id
-                    ? navigation.navigate("ProfilePeople", {
+                    ? navigation.navigate('ProfilePeople', {
                         id: userId,
                         imageUri,
                         userTag,
@@ -138,15 +138,15 @@ export default function PostBuilder({
                         name,
                       })
                     : userId && userId === user?.id
-                    ? navigation.navigate("Profile")
+                    ? navigation.navigate('Profile')
                     : null;
                 }}
                 android_ripple={{ color: rColor, foreground: true }}
                 style={{
                   height: 50,
                   width: 50,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 {imageUri ? (
@@ -156,7 +156,7 @@ export default function PostBuilder({
                 )}
               </Pressable>
             </View>
-            <View style={{ width: "85%", justifyContent: "flex-start" }}>
+            <View style={{ width: '85%', justifyContent: 'flex-start' }}>
               <NameAndTag
                 name={name}
                 deletePost={deletePost}
@@ -176,7 +176,7 @@ export default function PostBuilder({
                 ) : (
                   <LinkPost
                     id={link.id}
-                    photoUri={[link.imageUri || ""]}
+                    photoUri={[link.imageUri || '']}
                     title={link.title}
                     url={postText}
                   />

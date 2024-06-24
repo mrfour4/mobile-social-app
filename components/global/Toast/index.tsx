@@ -1,27 +1,35 @@
-import { View, Text, Dimensions, TouchableWithoutFeedback } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Dimensions,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Animated, {
   FadeInUp,
   FadeOutUp,
   runOnJS,
-} from "react-native-reanimated";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
-import { closeToast } from "../../../redux/slice/toast/toast";
-import { BlurView } from "expo-blur";
-import { ForbiddenIcon, InfoIcon, VerifyIcon } from "../../icons";
-import useGetMode from "../../../hooks/GetMode";
-import { Portal } from "react-native-paper";
-import { useForm } from "react-hook-form";
+} from 'react-native-reanimated';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks';
+import { closeToast } from '../../../redux/slice/toast/toast';
+import { BlurView } from 'expo-blur';
+import { ForbiddenIcon, InfoIcon, VerifyIcon } from '../../icons';
+import useGetMode from '../../../hooks/GetMode';
+import { Portal } from 'react-native-paper';
+import { useForm } from 'react-hook-form';
 
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Image } from "expo-image";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
+import { useNavigation } from '@react-navigation/native';
+import { HomeNavigationProp } from '../../../types/navigation';
 
-const width = Dimensions.get("window").width;
+const width = Dimensions.get('window').width;
 export default function CustomToast() {
   const dark = useGetMode();
-  const color = dark ? "white" : "black";
-  const tint = dark ? "dark" : "light";
-  const colorForbidden = dark ? "#ff0000" : "#400000";
+  const color = dark ? 'white' : 'black';
+  const tint = dark ? 'dark' : 'light';
+  const colorForbidden = dark ? '#ff0000' : '#400000';
   const dispatch = useAppDispatch();
 
   const toastState = useAppSelector((state) => state.toast);
@@ -31,18 +39,18 @@ export default function CustomToast() {
   }
 
   function callback() {
-    "worklet";
+    'worklet';
     runOnJS(handleClose)();
   }
 
   const renderIcon = () => {
-    if (toastState?.type === "Failed") {
+    if (toastState?.type === 'Failed') {
       return <ForbiddenIcon size={20} color={colorForbidden} />;
-    } else if (toastState?.type === "Success") {
-      return <VerifyIcon size={20} color={"green"} />;
-    } else if (toastState?.type === "Info") {
+    } else if (toastState?.type === 'Success') {
+      return <VerifyIcon size={20} color={'green'} />;
+    } else if (toastState?.type === 'Info') {
       return <InfoIcon size={20} color={color} />;
-    } else if (toastState?.type === "Message") {
+    } else if (toastState?.type === 'Message') {
       return (
         <Image
           style={{ height: 20, width: 20, borderRadius: 999 }}
@@ -51,14 +59,31 @@ export default function CustomToast() {
       );
     }
   };
+
   const insets = useSafeAreaInsets();
   const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   return (
     <Portal>
       {toastState?.open && (
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() => {
-            console.log("pressed");
+            handleClose();
+            // navigation.navigate('ChatScreen', {
+            //   id: toastState.chatId,
+            //   receiverId,
+            //   name:
+            //     data.users?.length === 1
+            //       ? data.users[0]?.userName
+            //       : data.users[0]?.id === userId
+            //       ? data.users[1].userName
+            //       : data.users[0].userName,
+            //   imageUri:
+            //     data.users?.length === 1
+            //       ? data.users[0]?.imageUri
+            //       : data.users[0]?.id === userId
+            //       ? data.users[1].imageUri
+            //       : data.users[0].imageUri,
+            // });
           }}
         >
           <Animated.View
@@ -66,13 +91,13 @@ export default function CustomToast() {
               height: 60 + insets.top,
               width: width,
               backgroundColor:
-                toastState?.type === "Failed"
-                  ? "#D8000061"
-                  : toastState?.type === "Success"
-                  ? "#4CF10062"
-                  : "#00000058",
-              justifyContent: "flex-end",
-              alignItems: "center",
+                toastState?.type === 'Failed'
+                  ? '#D8000061'
+                  : toastState?.type === 'Success'
+                  ? '#4CF10062'
+                  : '#00000058',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
             }}
             entering={FadeInUp.springify().withCallback(callback)}
             exiting={FadeOutUp.springify().delay(1000)}
@@ -80,16 +105,16 @@ export default function CustomToast() {
             <BlurView
               experimentalBlurMethod="dimezisBlurView"
               tint={tint}
-              style={{ position: "absolute", width, height: 60 + insets.top }}
+              style={{ position: 'absolute', width, height: 60 + insets.top }}
               intensity={50}
             />
 
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: 10,
-                justifyContent: "center",
+                justifyContent: 'center',
                 paddingBottom: 20,
               }}
             >
@@ -97,7 +122,7 @@ export default function CustomToast() {
               <Text
                 style={{
                   color,
-                  fontFamily: "mulishMedium",
+                  fontFamily: 'mulishMedium',
                   fontSize: 16,
                 }}
               >
@@ -105,7 +130,7 @@ export default function CustomToast() {
               </Text>
             </View>
           </Animated.View>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       )}
     </Portal>
   );

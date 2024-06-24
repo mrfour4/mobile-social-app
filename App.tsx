@@ -1,6 +1,6 @@
-import "react-native-gesture-handler";
-import "react-native-get-random-values";
-import { StatusBar } from "expo-status-bar";
+import 'react-native-gesture-handler';
+import 'react-native-get-random-values';
+import { StatusBar } from 'expo-status-bar';
 import {
   Text,
   ImageURISource,
@@ -9,13 +9,13 @@ import {
   AppState,
   useColorScheme,
   Platform,
-} from "react-native";
-import * as Linking from "expo-linking";
+} from 'react-native';
+import * as Linking from 'expo-linking';
 
-import { NavigationContainer } from "@react-navigation/native";
-import * as SplashScreen from "expo-splash-screen";
-import { useFonts } from "expo-font";
-import Main from "./routes/Main";
+import { NavigationContainer } from '@react-navigation/native';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
+import Main from './routes/Main';
 import {
   ReactNode,
   useCallback,
@@ -23,22 +23,22 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { Provider } from "react-redux";
-import { store } from "./redux/store";
+} from 'react';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
-import OnboardNavigation from "./routes/OnBoard";
-import { useAppDispatch, useAppSelector } from "./redux/hooks/hooks";
-import Auth from "./routes/Auth";
-import { FadeInView } from "./components/global/AnimatedScreen/FadeInView";
-import useGetMode from "./hooks/GetMode";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistStore } from "redux-persist";
-import CustomToast from "./components/global/Toast";
-import { PaperProvider } from "react-native-paper";
+import OnboardNavigation from './routes/OnBoard';
+import { useAppDispatch, useAppSelector } from './redux/hooks/hooks';
+import Auth from './routes/Auth';
+import { FadeInView } from './components/global/AnimatedScreen/FadeInView';
+import useGetMode from './hooks/GetMode';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
+import CustomToast from './components/global/Toast';
+import { PaperProvider } from 'react-native-paper';
 
-import { LoadingModal } from "./components/global/Modal/LoadingOverlay";
-import { enableFreeze } from "react-native-screens";
+import { LoadingModal } from './components/global/Modal/LoadingOverlay';
+import { enableFreeze } from 'react-native-screens';
 
 import Animated, {
   BounceOutDown,
@@ -53,21 +53,21 @@ import Animated, {
   useSharedValue,
   withDelay,
   withTiming,
-} from "react-native-reanimated";
-import { useNetInfo } from "@react-native-community/netinfo";
-import { openToast } from "./redux/slice/toast/toast";
+} from 'react-native-reanimated';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { openToast } from './redux/slice/toast/toast';
 
-import * as Sentry from "@sentry/react-native";
-import { useGetFollowDetailsQuery } from "./redux/api/user";
-import * as Device from "expo-device";
-import * as NavigationBar from "expo-navigation-bar";
-import Notifications from "./util/notification";
-import { PixelRatio } from "react-native";
-import DeviceInfo from "react-native-device-info";
-import { setHighEnd } from "./redux/slice/prefs";
+import * as Sentry from '@sentry/react-native';
+import { useGetFollowDetailsQuery } from './redux/api/user';
+import * as Device from 'expo-device';
+import * as NavigationBar from 'expo-navigation-bar';
+import Notifications from './util/notification';
+import { PixelRatio } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import { setHighEnd } from './redux/slice/prefs';
 enableFreeze(true);
 Sentry.init({
-  dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
+  dsn: 'https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968',
   enabled: true,
 });
 
@@ -78,19 +78,19 @@ export default function App() {
   useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener(
       (notification) => {
-        console.log("🚀😒🚀", notification.request.content.data);
+        console.log('🚀😒🚀', notification.request.content.data);
       }
     );
     const subscriptionResponse =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("response", response.actionIdentifier);
+        console.log('response', response.actionIdentifier);
         console.log(
-          "🚀 ~ file: App.tsx:81 ~ Notifications.addNotificationResponseReceivedListener ~ response:"
+          '🚀 ~ file: App.tsx:81 ~ Notifications.addNotificationResponseReceivedListener ~ response:'
         );
-        if (response.actionIdentifier === "message") {
+        if (response.actionIdentifier === 'message') {
           const userText = response.userText;
           console.log(
-            "🚀✅✅ ~ file: App.tsx:83 ~ Notifications.addNotificationResponseReceivedListener ~ userText:",
+            '🚀✅✅ ~ file: App.tsx:83 ~ Notifications.addNotificationResponseReceivedListener ~ userText:',
             userText
           );
         }
@@ -135,14 +135,14 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
     }, 2000);
   }, []);
   const dark = useGetMode();
-  const backgroundColor = dark ? "black" : "white";
-  const color = !dark ? "black" : "white";
-  const style = dark ? "light" : "dark";
+  const backgroundColor = dark ? 'black' : 'white';
+  const color = !dark ? 'black' : 'white';
+  const style = dark ? 'light' : 'dark';
 
   const offset = useSharedValue(0);
   const opacityK = useSharedValue(0);
   const offsetK = useSharedValue(0);
-  const backgroundColorOffset = useSharedValue("black");
+  const backgroundColorOffset = useSharedValue('black');
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -195,7 +195,7 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
   }, [backgroundColor]);
 
   function callback() {
-    "worklet";
+    'worklet';
     runOnJS(onImageLoaded)();
   }
 
@@ -232,8 +232,8 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
           style={[
             {
               flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               backgroundColor,
             },
             animateBackgroundEntryStyle,
@@ -257,21 +257,21 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
               left: 0,
               right: 0,
               bottom: 0,
-              justifyContent: "center",
+              justifyContent: 'center',
 
-              alignItems: "center",
-              width: "100%",
+              alignItems: 'center',
+              width: '100%',
               aspectRatio: 1278 / 2278,
-              flexDirection: "row",
+              flexDirection: 'row',
             }}
           >
             <Animated.Text
               style={[
                 {
-                  fontFamily: "uberBold",
+                  fontFamily: 'uberBold',
                   fontSize: 110,
                   paddingLeft: 60,
-                  textAlign: "center",
+                  textAlign: 'center',
                   color,
                 },
                 animatedStyles,
@@ -282,10 +282,10 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
             <Animated.Text
               style={[
                 {
-                  fontFamily: "uberBold",
+                  fontFamily: 'uberBold',
                   fontSize: 110,
                   color,
-                  textAlign: "center",
+                  textAlign: 'center',
                 },
                 animatedStylesK,
               ]}
@@ -295,10 +295,10 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
           </Animated.View>
           <Animated.View
             style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "absolute",
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'absolute',
               bottom: 0,
               marginBottom: 20,
             }}
@@ -306,12 +306,12 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
             <Text
               style={{
                 color,
-                fontFamily: "mulish",
+                fontFamily: 'mulish',
 
                 fontSize: 14,
               }}
             >
-              🌐 www.isaacojo.me
+              🌐 UIT Mobile Project
             </Text>
           </Animated.View>
         </Animated.View>
@@ -323,21 +323,21 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
 const Navigation = () => {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
-  const style = dark ? "light" : "dark";
+  const style = dark ? 'light' : 'dark';
   useGetFollowDetailsQuery(null);
   const { route } = useAppSelector((state) => state.routes);
   const userAuthenticated = useAppSelector((state) => state.user.token);
   console.log(
-    "🚀 ~ file: App.tsx:330 ~ Navigation ~ userAuthenticated:",
+    '🚀 ~ file: App.tsx:330 ~ Navigation ~ userAuthenticated:',
     userAuthenticated
   );
 
   const netInfo = useNetInfo();
 
-  const barColor = !dark ? "black" : "white";
+  const barColor = !dark ? 'black' : 'white';
   useEffect(() => {
     const navBehavior = async () => {
-      Platform.OS === "ios"
+      Platform.OS === 'ios'
         ? null
         : await NavigationBar.setBackgroundColorAsync(barColor);
     };
@@ -347,7 +347,7 @@ const Navigation = () => {
   useEffect(() => {
     if (netInfo.isConnected !== null) {
       if (!netInfo.isConnected) {
-        dispatch(openToast({ text: "No Internet", type: "Failed" }));
+        dispatch(openToast({ text: 'No Internet', type: 'Failed' }));
       }
     }
   }, [netInfo]);
@@ -355,31 +355,31 @@ const Navigation = () => {
   useEffect(() => {
     Device.deviceYearClass;
     console.log(
-      "🚀 ~ file: App.tsx:351 ~ useEffect ~ Device:",
+      '🚀 ~ file: App.tsx:351 ~ useEffect ~ Device:',
       Device.modelName
     );
     const getRam = DeviceInfo.getTotalMemorySync();
-    console.log("🚀 ~ file: App.tsx:351 ~ useEffect ~ getRam:", getRam);
+    console.log('🚀 ~ file: App.tsx:351 ~ useEffect ~ getRam:', getRam);
     const isHighEnd =
       (DeviceInfo.getApiLevelSync() >= 33 && getRam >= 6_442_450_944) ||
-      Platform.OS === "ios";
-    console.log("🚀 ~ file: App.tsx:446 ~ useEffect ~ isHighEnd:", isHighEnd);
+      Platform.OS === 'ios';
+    console.log('🚀 ~ file: App.tsx:446 ~ useEffect ~ isHighEnd:', isHighEnd);
 
     dispatch(setHighEnd({ isHighEnd }));
   }, []);
 
   const [fontsLoaded] = useFonts({
-    mulish: require("./assets/fonts/Mulish-Light.ttf"),
-    mulishBold: require("./assets/fonts/Mulish-Black.ttf"),
-    mulishMedium: require("./assets/fonts/Mulish-Medium.ttf"),
-    uberBold: require("./assets/fonts/UberMove-Bold.ttf"),
-    instaBold: require("./assets/fonts/Instagram.ttf"),
-    jakaraBold: require("./assets/fonts/PlusJakartaSans-ExtraBold.ttf"),
-    jakara: require("./assets/fonts/PlusJakartaSans-Medium.ttf"),
+    mulish: require('./assets/fonts/Mulish-Light.ttf'),
+    mulishBold: require('./assets/fonts/Mulish-Black.ttf'),
+    mulishMedium: require('./assets/fonts/Mulish-Medium.ttf'),
+    uberBold: require('./assets/fonts/UberMove-Bold.ttf'),
+    instaBold: require('./assets/fonts/Instagram.ttf'),
+    jakaraBold: require('./assets/fonts/PlusJakartaSans-ExtraBold.ttf'),
+    jakara: require('./assets/fonts/PlusJakartaSans-Medium.ttf'),
   });
 
   const renderRoute = () => {
-    if (route === "onBoard") {
+    if (route === 'onBoard') {
       return <OnboardNavigation />;
     } else if (userAuthenticated) {
       return (
@@ -387,7 +387,7 @@ const Navigation = () => {
           <Main />
         </FadeInView>
       );
-    } else if (route === "Auth" || !userAuthenticated) {
+    } else if (route === 'Auth' || !userAuthenticated) {
       return (
         <FadeInView style={{ flex: 1 }}>
           <Auth />
@@ -406,19 +406,19 @@ const Navigation = () => {
   }
 
   const linking = {
-    prefixes: ["https://qui.ojoisaac.me", "qui-ojo://"],
+    prefixes: ['https://qui.ojoisaac.me', 'qui-ojo://'],
     config: {
       screens: {
-        Main: "/",
-        ChatScreen: "messages/:chatId",
-        ViewPost: "posts/:postId",
+        Main: '/',
+        ChatScreen: 'messages/:chatId',
+        ViewPost: 'posts/:postId',
       },
     },
     async getInitialURL() {
       // First, you may want to do the default deep link handling
       // Check if app was opened from a deep link
       const url = await Linking.getInitialURL();
-      console.log("🚀 ~ file: App.tsx:277 ~ getInitialURL ~ url:", url);
+      console.log('🚀 ~ file: App.tsx:277 ~ getInitialURL ~ url:', url);
 
       if (url != null) {
         return url;
@@ -427,7 +427,7 @@ const Navigation = () => {
       // Handle URL from expo push notifications
       const response = await Notifications.getLastNotificationResponseAsync();
       console.log(
-        "🚀 ~ file: App.tsx:285 ~ getInitialURL ~ response:",
+        '🚀 ~ file: App.tsx:285 ~ getInitialURL ~ response:',
         response?.notification.request.content.data
       );
 
@@ -438,7 +438,7 @@ const Navigation = () => {
 
       // Listen to incoming links from deep linking
       const eventListenerSubscription = Linking.addEventListener(
-        "url",
+        'url',
         onReceiveURL
       );
 

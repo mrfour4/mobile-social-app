@@ -6,26 +6,26 @@ import {
   ActivityIndicator,
   Pressable,
   Keyboard,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import AnimatedScreen from "../../components/global/AnimatedScreen";
-import { ViewPost } from "../../types/navigation";
-import FullScreenPost from "../../components/home/post/FullScreenPost";
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import AnimatedScreen from '../../components/global/AnimatedScreen';
+import { ViewPost } from '../../types/navigation';
+import FullScreenPost from '../../components/home/post/FullScreenPost';
 import {
   useLazyGetCommentByPostQuery,
   useLazyGetSinglePostQuery,
   usePostCommentMutation,
-} from "../../redux/api/services";
-import { IComment } from "../../types/api";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
-import { openToast } from "../../redux/slice/toast/toast";
-import CommentBuilder from "../../components/home/post/comment/CommentBuilder";
-import useGetMode from "../../hooks/GetMode";
-import Button from "../../components/global/Buttons/Button";
-import CommentButton from "../../components/home/post/comment/PostButton";
-import uuid from "react-native-uuid";
-import { BlurView } from "expo-blur";
-import Animated, { FadeIn } from "react-native-reanimated";
+} from '../../redux/api/services';
+import { IComment } from '../../types/api';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks';
+import { openToast } from '../../redux/slice/toast/toast';
+import CommentBuilder from '../../components/home/post/comment/CommentBuilder';
+import useGetMode from '../../hooks/GetMode';
+import Button from '../../components/global/Buttons/Button';
+import CommentButton from '../../components/home/post/comment/PostButton';
+import uuid from 'react-native-uuid';
+import { BlurView } from 'expo-blur';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 export default function PostScreen({ navigation, route }: ViewPost) {
   const { params } = route;
@@ -36,11 +36,10 @@ export default function PostScreen({ navigation, route }: ViewPost) {
   const [postComment, postCommentResponse] = usePostCommentMutation();
 
   const dark = useGetMode();
-  const color = dark ? "white" : "black";
-  const backgroundColor = !dark ? "white" : "black";
+  const color = dark ? 'white' : 'black';
+  const backgroundColor = !dark ? 'white' : 'black';
   const [getComments, commentResponse] = useLazyGetCommentByPostQuery();
   const [getSinglePost, singlePostResponse] = useLazyGetSinglePostQuery();
-  console.log(singlePostResponse.data)
   useEffect(() => {
     if (params.id) {
       getComments({ id: params.id })
@@ -50,7 +49,7 @@ export default function PostScreen({ navigation, route }: ViewPost) {
         })
         .catch((e) => {
           dispatch(
-            openToast({ text: "Failed to get Comments", type: "Failed" })
+            openToast({ text: 'Failed to get Comments', type: 'Failed' })
           );
         });
     } else {
@@ -62,15 +61,16 @@ export default function PostScreen({ navigation, route }: ViewPost) {
           })
           .catch((e) => {
             dispatch(
-              openToast({ text: "Failed to get Comments", type: "Failed" })
+              openToast({ text: 'Failed to get Comments', type: 'Failed' })
             );
           });
     }
   }, [params?.id]);
 
   useEffect(() => {
-    if (!params?.id) {
-      getSinglePost({ id: params?.postId as string }).then((e) => {
+    if (params?.id) {
+      console.log('call single post');
+      getSinglePost({ id: params?.id as string }).then((e) => {
         console.log(e);
       });
     }
@@ -80,13 +80,13 @@ export default function PostScreen({ navigation, route }: ViewPost) {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
+      'keyboardDidShow',
       () => {
         setKeyboardVisible(true); // or some other action
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
+      'keyboardDidHide',
       () => {
         setKeyboardVisible(false); // or some other action
       }
@@ -97,16 +97,16 @@ export default function PostScreen({ navigation, route }: ViewPost) {
     };
   }, []);
 
-  const handleCommentPost = () => {
+  const handleCommentPost = async () => {
     Keyboard.dismiss();
-    setCommentText("");
+    setCommentText('');
     if (commentText) {
       setComments((prev) => [
         {
           id: uuid.v4().toString(),
           User: {
-            id: "0",
-            imageUri: user?.imageUri || "",
+            id: '0',
+            imageUri: user?.imageUri || '',
             verified: false,
             userName: user?.userName as string,
             name: user?.name as string,
@@ -116,10 +116,16 @@ export default function PostScreen({ navigation, route }: ViewPost) {
         },
         ...prev,
       ]);
-      postComment({ id: params.id, comment: commentText });
+
+      await postComment({ id: params.id, comment: commentText });
+      await getSinglePost({ id: params.id }).then((e) => {
+        console.log(e);
+      });
     }
   };
-  const tint = dark ? "dark" : "light";
+  console.log(singlePostResponse?.data?.posts?._count?.comments);
+
+  const tint = dark ? 'dark' : 'light';
   return (
     <Animated.View
       entering={FadeIn.duration(400)}
@@ -127,56 +133,51 @@ export default function PostScreen({ navigation, route }: ViewPost) {
     >
       <FlatList
         ListHeaderComponent={
-          params.id ? (
-            <FullScreenPost {...params} />
-          ) : (
-            singlePostResponse.data?.posts && (
-              <FullScreenPost
-                id={singlePostResponse.data?.posts.id}
-                isReposted={
-                  singlePostResponse.data?.posts?.repostUser?.find(
-                    (repostUser) => repostUser?.id === user?.id
-                  )
-                    ? true
-                    : false
-                }
-                date={singlePostResponse.data?.posts.createdAt}
-                link={singlePostResponse.data?.posts.link}
-                comments={singlePostResponse.data?.posts._count?.comments}
-                like={singlePostResponse.data?.posts._count?.like}
-                isLiked={
-                  singlePostResponse.data?.posts?.like?.find(
-                    (like) => like?.userId === user?.id
-                  )
-                    ? true
-                    : false
-                }
-                photo={
-                  singlePostResponse.data?.posts.photo
-                    ? {
-                        uri: singlePostResponse.data?.posts.photo?.imageUri,
-                        width: singlePostResponse.data?.posts.photo?.imageWidth,
-                        height:
-                          singlePostResponse.data?.posts.photo?.imageHeight,
-                      }
-                    : undefined
-                }
-                thumbNail={singlePostResponse.data?.posts.videoThumbnail}
-                imageUri={singlePostResponse.data?.posts.user?.imageUri}
-                name={singlePostResponse.data?.posts.user?.name}
-                userId={singlePostResponse.data?.posts.user?.id}
-                userTag={singlePostResponse.data?.posts.user?.userName}
-                verified={singlePostResponse.data?.posts.user?.verified}
-                audioUri={singlePostResponse.data?.posts.audioUri || undefined}
-                photoUri={singlePostResponse.data?.posts.photoUri}
-                videoTitle={
-                  singlePostResponse.data?.posts.videoTitle || undefined
-                }
-                videoUri={singlePostResponse.data?.posts.videoUri || undefined}
-                postText={singlePostResponse.data?.posts.postText}
-                videoViews={singlePostResponse.data?.posts.videoViews?.toString()}
-              />
-            )
+          singlePostResponse.data?.posts && (
+            <FullScreenPost
+              id={singlePostResponse.data?.posts.id}
+              isReposted={
+                singlePostResponse.data?.posts?.repostUser?.find(
+                  (repostUser) => repostUser?.id === user?.id
+                )
+                  ? true
+                  : false
+              }
+              date={singlePostResponse.data?.posts.createdAt}
+              link={singlePostResponse.data?.posts.link}
+              comments={singlePostResponse.data?.posts._count?.comments}
+              like={singlePostResponse.data?.posts._count?.like}
+              isLiked={
+                singlePostResponse.data?.posts?.like?.find(
+                  (like) => like?.userId === user?.id
+                )
+                  ? true
+                  : false
+              }
+              photo={
+                singlePostResponse.data?.posts.photo
+                  ? {
+                      uri: singlePostResponse.data?.posts.photo?.imageUri,
+                      width: singlePostResponse.data?.posts.photo?.imageWidth,
+                      height: singlePostResponse.data?.posts.photo?.imageHeight,
+                    }
+                  : undefined
+              }
+              thumbNail={singlePostResponse.data?.posts.videoThumbnail}
+              imageUri={singlePostResponse.data?.posts.user?.imageUri}
+              name={singlePostResponse.data?.posts.user?.name}
+              userId={singlePostResponse.data?.posts.user?.id}
+              userTag={singlePostResponse.data?.posts.user?.userName}
+              verified={singlePostResponse.data?.posts.user?.verified}
+              audioUri={singlePostResponse.data?.posts.audioUri || undefined}
+              photoUri={singlePostResponse.data?.posts.photoUri}
+              videoTitle={
+                singlePostResponse.data?.posts.videoTitle || undefined
+              }
+              videoUri={singlePostResponse.data?.posts.videoUri || undefined}
+              postText={singlePostResponse.data?.posts.postText}
+              videoViews={singlePostResponse.data?.posts.videoViews?.toString()}
+            />
           )
         }
         data={comments}
@@ -221,32 +222,42 @@ export default function PostScreen({ navigation, route }: ViewPost) {
             opacity: 0.1,
           }}
         />
-        <View style={{ alignItems: 'flex-end', width: '100%', paddingTop: 10 }}>
-          {!isKeyboardVisible && (
-            <CommentButton
-              onPress={handleCommentPost}
-              isDisabled={!commentText}
-              isLoading={postCommentResponse.isLoading}
-            />
-          )}
-        </View>
-        <TextInput
-          placeholder="Post comment"
-          value={commentText || ''}
-          onChangeText={setCommentText}
-          placeholderTextColor={'grey'}
+        <View
           style={{
-            borderBottomColor: '#7a868f',
-            borderBottomWidth: 0.5,
-            fontFamily: 'jakara',
-            height: 50,
-            color,
-
-            width: '100%',
-            includeFontPadding: false,
-            fontSize: 16,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
-        />
+        >
+          <TextInput
+            placeholder="Post comment"
+            value={commentText || ''}
+            onChangeText={setCommentText}
+            placeholderTextColor={'grey'}
+            style={{
+              borderBottomColor: '#7a868f',
+              borderBottomWidth: 0.5,
+              fontFamily: 'jakara',
+              height: 50,
+              color,
+
+              width: '80%',
+              includeFontPadding: false,
+              fontSize: 16,
+            }}
+          />
+          <View
+            style={{ alignItems: 'flex-end', width: '20%', paddingTop: 10 }}
+          >
+            {!isKeyboardVisible && (
+              <CommentButton
+                onPress={handleCommentPost}
+                isDisabled={!commentText}
+                isLoading={postCommentResponse.isLoading}
+              />
+            )}
+          </View>
+        </View>
       </View>
     </Animated.View>
   );

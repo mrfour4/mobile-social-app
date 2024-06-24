@@ -1,6 +1,6 @@
-import { View, Text, useColorScheme, Pressable } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import LikeButton from "./LikeButton";
+import { View, Text, useColorScheme, Pressable } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import LikeButton from './LikeButton';
 import {
   ActivityUnfocused,
   HeartUnfocused,
@@ -9,15 +9,15 @@ import {
   MessageUnfocused,
   MessagesIcon,
   ShareUnfocused,
-} from "../../../icons";
-import useGetMode from "../../../../hooks/GetMode";
+} from '../../../icons';
+import useGetMode from '../../../../hooks/GetMode';
 import {
   useLazyLikePostQuery,
   useLazyRepostQuery,
-} from "../../../../redux/api/services";
-import CommentButton from "./CommentButton";
-import RepostButton from "./RepostButton";
-import EngagementsText from "../misc/EngagementText";
+} from '../../../../redux/api/services';
+import CommentButton from './CommentButton';
+import RepostButton from './RepostButton';
+import EngagementsText from '../misc/EngagementText';
 
 export default function EngagementsFullScreen({
   title,
@@ -40,21 +40,27 @@ export default function EngagementsFullScreen({
   const isDark = dark;
   const [reposted, setRepost] = useState(() => isReposted);
   const [likeAmount, setLikeAmount] = useState(() => like);
-  console.log(likeAmount)
-  const [clicked, setClicked] = useState(() => isLiked);
+
+  const [liked, setLiked] = useState(() => isLiked);
   const [clickedComment, setClickedComment] = useState(false);
   const [likePost] = useLazyLikePostQuery();
-  const shareColor = isDark ? "#91EC09" : "#639E0B";
-  const handleClicked = (click: boolean) => {
-    console.log(click);
-    setClicked(click);
-    likePost({ id });
-    if (click) {
-      setLikeAmount(likeAmount + 1);
-    } else {
-      setLikeAmount(likeAmount - 1);
+  const shareColor = isDark ? '#91EC09' : '#639E0B';
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    if (mounted) {
+      if (liked) {
+        setLikeAmount((prev) => prev + 1);
+      } else {
+        setLikeAmount((prev) => prev - 1);
+      }
     }
-  };
+  }, [liked]);
+
   const handleClickComment = () => {
     setClickedComment(!clickedComment);
   };
@@ -66,7 +72,7 @@ export default function EngagementsFullScreen({
     rePostPost({ id });
   };
 
-  const color = isDark ? "white" : "black";
+  const color = isDark ? 'white' : 'black';
   return (
     <>
       <View
@@ -110,11 +116,7 @@ export default function EngagementsFullScreen({
             setClicked={handleClickComment}
             clicked={clickedComment}
           />
-          <LikeButton
-            isLiked={isLiked}
-            clicked={clicked}
-            setClicked={handleClicked}
-          />
+          <LikeButton isLiked={isLiked} setLiked={setLiked} />
           <RepostButton
             isPosted={isReposted}
             clicked={reposted}

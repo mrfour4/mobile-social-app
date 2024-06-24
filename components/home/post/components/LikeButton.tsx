@@ -4,8 +4,8 @@ import {
   useColorScheme,
   Pressable,
   StyleSheet,
-} from "react-native";
-import React, { ElementType, Ref, useEffect, useState } from "react";
+} from 'react-native';
+import React, { ElementType, Ref, useEffect, useState } from 'react';
 import Animated, {
   Extrapolate,
   FadeIn,
@@ -15,28 +15,25 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import useGetMode from "../../../../hooks/GetMode";
-import LikeLottie from "../misc/Robot";
-import Lottie from "lottie-react-native";
-import { HeartUnfocused, HeartsFocused } from "../../../icons";
-import MaterialIcons from "@expo/vector-icons/MaterialCommunityIcons";
+} from 'react-native-reanimated';
+import useGetMode from '../../../../hooks/GetMode';
+import LikeLottie from '../misc/Robot';
+import Lottie from 'lottie-react-native';
+import { HeartUnfocused, HeartsFocused } from '../../../icons';
+import MaterialIcons from '@expo/vector-icons/MaterialCommunityIcons';
 export default function LikeButton({
   isLiked,
-  clicked,
   text,
 
-  setClicked,
+  setLiked,
 }: {
   text?: string;
-  setClicked: (isClicked: boolean) => void;
-  clicked: boolean;
+  setLiked: (isClicked: boolean) => void;
   isLiked?: boolean;
 }) {
   const dark = useGetMode();
   const isDark = dark;
-  const color = isDark ? "white" : "black";
-
+  const color = isDark ? 'white' : 'black';
   const liked = useSharedValue(isLiked ? 1 : 0);
 
   const outlineStyle = useAnimatedStyle(() => {
@@ -61,22 +58,22 @@ export default function LikeButton({
   return (
     <View
       style={{
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       <Pressable
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           width: 30,
           height: 22,
           gap: 2,
-          alignItems: "center",
+          alignItems: 'center',
         }}
         onPress={() => {
           liked.value = withSpring(liked.value ? 0 : 1);
-          setClicked(liked.value ? false : true);
+          setLiked(liked.value ? false : true);
         }}
       >
         <View style={{ width: 18 }}>
@@ -85,17 +82,17 @@ export default function LikeButton({
               <Animated.View
                 style={[StyleSheet.absoluteFillObject, outlineStyle]}
               >
-                <HeartUnfocused size={18} color={"red"} />
+                <HeartUnfocused size={18} color={'red'} />
               </Animated.View>
 
               <Animated.View style={fillStyle}>
-                <HeartsFocused size={18} color={"red"} />
+                <HeartsFocused size={18} color={'red'} />
               </Animated.View>
             </>
           }
         </View>
         <Text
-          style={{ color, fontFamily: "jakara", includeFontPadding: false }}
+          style={{ color, fontFamily: 'jakara', includeFontPadding: false }}
         >
           {text}
         </Text>

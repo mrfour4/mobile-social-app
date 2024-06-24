@@ -1,7 +1,7 @@
-import { View, Text, FlatList } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
 
-import { personState } from "../../../redux/slice/people/search";
+import { personState } from '../../../redux/slice/people/search';
 import Animated, {
   BounceIn,
   FadeIn,
@@ -17,12 +17,12 @@ import Animated, {
   useSharedValue,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { SearchSkeleton } from "../../../components/discover/Skeleton/SearchSkeleton";
-import PeopleContainer from "../../../components/discover/PeopleContainer";
-import { useAppSelector } from "../../../redux/hooks/hooks";
-import { Image } from "expo-image";
+import { SearchSkeleton } from '../../../components/discover/Skeleton/SearchSkeleton';
+import PeopleContainer from '../../../components/discover/PeopleContainer';
+import { useAppSelector } from '../../../redux/hooks/hooks';
+import { Image } from 'expo-image';
 
 export default function Users() {
   const people = useAppSelector((state) => state.searchPeople);
@@ -44,14 +44,11 @@ export default function Users() {
     <Animated.View
       entering={FadeInRight.springify()}
       exiting={FadeOutRight.springify()}
-      style={{ gap: 5, marginVertical: 20, height: "100%" }}
+      style={{ gap: 5, marginVertical: 20, height: '100%' }}
     >
       {people?.loading && (
         <Animated.View
-          style={[
-            { gap: 5,  paddingHorizontal: 10 },
-            animatedStyle,
-          ]}
+          style={[{ gap: 5, paddingHorizontal: 10 }, animatedStyle]}
         >
           {[0, 1, 2].map((idx) => (
             <SearchSkeleton key={idx} />
@@ -63,21 +60,20 @@ export default function Users() {
           entering={FadeInUp.springify()}
           exiting={FadeOutDown.springify()}
           style={{
-            justifyContent: "center",
-            alignItems: "center",
-            height: "70%",
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '70%',
           }}
         >
           <Image
             style={{ height: 300, width: 300 }}
-            source={require("../../../assets/images/emptySearch.png")}
+            source={require('../../../assets/images/emptySearch.png')}
           />
         </Animated.View>
       )}
       <FlatList
-        data={people.data}
+        data={people?.data}
         contentContainerStyle={{
-        
           paddingBottom: 100,
           gap: 5,
           paddingHorizontal: 10,

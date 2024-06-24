@@ -1,60 +1,60 @@
-import { Platform, View } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Platform, View } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { RootStackParamList } from "../types/navigation";
+import { RootStackParamList } from '../types/navigation';
 
-import { BlurView } from "expo-blur";
+import { BlurView } from 'expo-blur';
 
-import ImageFullScreen from "../screen/App/ImageFullScreen";
+import ImageFullScreen from '../screen/App/ImageFullScreen';
 
-import Profile from "../screen/App/Profile";
+import Profile from '../screen/App/Profile';
 
-import useGetMode from "../hooks/GetMode";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
-import PostContent from "../screen/App/PostContent";
+import useGetMode from '../hooks/GetMode';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { BottomSheetContainer } from '../components/global/BottomSheetContainer';
+import PostContent from '../screen/App/PostContent';
 
-import VideoFullScreen from "../screen/App/VideoFullScreen";
-import { useAppDispatch, useAppSelector } from "../redux/hooks/hooks";
+import VideoFullScreen from '../screen/App/VideoFullScreen';
+import { useAppDispatch, useAppSelector } from '../redux/hooks/hooks';
 import {
   useGetUserQuery,
   useUpdateNotificationIdMutation,
-} from "../redux/api/user";
-import PostScreen from "../screen/App/PostScreen";
-import { useEffect, useRef, useState } from "react";
+} from '../redux/api/user';
+import PostScreen from '../screen/App/PostScreen';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   updateFollowers,
   updateFollowing,
-} from "../redux/slice/user/followers";
-import ProfilePeople from "../screen/App/ProfilePeople";
-import ChatScreen from "../screen/App/ChatScreen";
-import SearchUsers from "../screen/App/SearchUsers";
+} from '../redux/slice/user/followers';
+import ProfilePeople from '../screen/App/ProfilePeople';
+import ChatScreen from '../screen/App/ChatScreen';
+import SearchUsers from '../screen/App/SearchUsers';
 
 import {
   addNewChat,
   addNewIndication,
   addToChatList,
-} from "../redux/slice/chat/chatlist";
-import * as BackgroundFetch from "expo-background-fetch";
-import * as TaskManager from "expo-task-manager";
-import { AppState } from "react-native";
+} from '../redux/slice/chat/chatlist';
+import * as BackgroundFetch from 'expo-background-fetch';
+import * as TaskManager from 'expo-task-manager';
+import { AppState } from 'react-native';
 
-import { updateOnlineIds } from "../redux/slice/chat/online";
-import { openToast } from "../redux/slice/toast/toast";
-import { IMessageSocket } from "../types/socket";
+import { updateOnlineIds } from '../redux/slice/chat/online';
+import { openToast } from '../redux/slice/toast/toast';
+import { IMessageSocket } from '../types/socket';
 
-import useSocket from "../hooks/Socket";
+import useSocket from '../hooks/Socket';
 
-import Notifications from "../util/notification";
+import Notifications from '../util/notification';
 
-import { BottomTabNavigator } from "./Main/BottomNavigation";
-import { dismissAllNotificationsAsync } from "expo-notifications";
-import { useLazyGetAllChatsQuery } from "../redux/api/chat";
-import FollowingFollowers from "../screen/App/FollowingFollowers";
-import EditProfile from "../screen/App/EditProfile";
-import ChangeData from "../screen/App/ChangeData";
-const BACKGROUND_FETCH_TASK = "background-fetch";
+import { BottomTabNavigator } from './Main/BottomNavigation';
+import { dismissAllNotificationsAsync } from 'expo-notifications';
+import { useLazyGetAllChatsQuery } from '../redux/api/chat';
+import FollowingFollowers from '../screen/App/FollowingFollowers';
+import EditProfile from '../screen/App/EditProfile';
+import ChangeData from '../screen/App/ChangeData';
+const BACKGROUND_FETCH_TASK = 'background-fetch';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
@@ -74,12 +74,12 @@ export default function Main() {
   const id = useAppSelector((state) => state.user?.data?.id);
   const dark = useGetMode();
   const isDark = dark;
-  const tint = isDark ? "dark" : "light";
-  const backgroundColor = isDark ? "black" : "white";
-  const color = !isDark ? "black" : "white";
+  const tint = isDark ? 'dark' : 'light';
+  const backgroundColor = isDark ? 'black' : 'white';
+  const color = !isDark ? 'black' : 'white';
   const dispatch = useAppDispatch();
   const socket = useSocket();
-  const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
+  const borderColor = isDark ? '#FFFFFF7D' : '#4545452D';
   const [getAllChats] = useLazyGetAllChatsQuery();
   useGetUserQuery(null);
   useEffect(() => {
@@ -97,15 +97,15 @@ export default function Main() {
         const { status: existingStatus } =
           await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
-        if (existingStatus !== "granted") {
+        if (existingStatus !== 'granted') {
           const { status } = await Notifications.requestPermissionsAsync();
           finalStatus = status;
         }
-        if (finalStatus !== "granted") {
+        if (finalStatus !== 'granted') {
           dispatch(
             openToast({
-              text: "Notifications are disabled",
-              type: "Failed",
+              text: 'Notifications are disabled',
+              type: 'Failed',
             })
           );
         }
@@ -114,20 +114,20 @@ export default function Main() {
         });
         console.log(token);
 
-        if (Platform.OS === "android") {
-          Notifications.setNotificationChannelAsync("default", {
-            name: "default",
+        if (Platform.OS === 'android') {
+          Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
             importance: Notifications.AndroidImportance.MAX,
             vibrationPattern: [0, 250, 250, 250],
-            lightColor: "#8FFF1FC0",
+            lightColor: '#8FFF1FC0',
           });
-          Notifications.setNotificationCategoryAsync("message", [
+          Notifications.setNotificationCategoryAsync('message', [
             {
-              identifier: "message",
-              buttonTitle: "Reply",
+              identifier: 'message',
+              buttonTitle: 'Reply',
               textInput: {
-                submitButtonTitle: "reply",
-                placeholder: "Enter Reply",
+                submitButtonTitle: 'reply',
+                placeholder: 'Enter Reply',
               },
             },
           ]);
@@ -139,7 +139,7 @@ export default function Main() {
 
     registerForPushNotificationsAsync()
       .then((e) => {
-        console.log("🚀 ~ file: Main.tsx:187 ~ .then ~ e:", e);
+        console.log('🚀 ~ file: Main.tsx:187 ~ .then ~ e:', e);
         updateNotificationId({ notificationId: e?.data as string });
       })
       .catch((e) => {
@@ -156,46 +156,45 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    socket?.on("connected", (connected) => {
-      dispatch(openToast({ text: "Connected", type: "Success" }));
+    socket?.on('connected', (connected) => {
+      // dispatch(openToast({ text: "Connected", type: "Success" }));
     });
     return () => {
-      socket?.off("connected");
+      socket?.off('connected');
     };
   }, [socket]);
 
   useEffect(() => {
-    socket?.emit("followedStatus");
-    socket?.on("following", (following: number) => {
+    socket?.emit('followedStatus');
+    socket?.on('following', (following: number) => {
       if (following) dispatch(updateFollowing({ following }));
     });
-    socket?.on("followers", (followers: number) => {
+    socket?.on('followers', (followers: number) => {
       if (followers) dispatch(updateFollowers({ followers }));
     });
     return () => {
-      socket?.off("following");
-      socket?.off("followers");
+      socket?.off('following');
+      socket?.off('followers');
     };
   }, [socket]);
 
   useEffect(() => {
     const rooms: string[] = [];
     for (let i in chatList) {
-
       rooms.push(chatList[i]?.id);
     }
-    socket?.emit("chat", rooms);
+    socket?.emit('chat', rooms);
 
     return () => {
-      socket?.off("chat");
+      socket?.off('chat');
     };
   }, [chatList]);
 
   useEffect(() => {
     if (socket) {
-      socket?.on("newChat", (chatMessages) => {
+      socket?.on('newChat', (chatMessages) => {
         console.log(
-          "🚀 ~ file: Main.tsx:203 ~ socket?.on ~ chatMessages:",
+          '🚀 ~ file: Main.tsx:203 ~ socket?.on ~ chatMessages:',
           chatMessages
         );
         if (chatMessages) {
@@ -213,19 +212,19 @@ export default function Main() {
       });
     }
     return () => {
-      socket?.off("newChat");
+      socket?.off('newChat');
     };
   }, [socket]);
 
   useEffect(() => {
-    socket?.on("online", (online) => {
+    socket?.on('online', (online) => {
       dispatch(updateOnlineIds({ ids: online }));
     });
 
-    socket?.on("message", (data: IMessageSocket) => {
+    socket?.on('message', (data: IMessageSocket) => {
       if (data) {
         console.log(
-          "🚀 ~ file: Main.tsx:267 ~ socket?.on ~ data:",
+          '🚀 ~ file: Main.tsx:267 ~ socket?.on ~ data:',
           new Date(),
           data
         );
@@ -234,7 +233,9 @@ export default function Main() {
           dispatch(addNewIndication());
           dispatch(
             openToast({
-              type: "Message",
+              type: 'Message',
+              message: data?.message,
+              chatId: data?.chatId,
               text: data?.message.text,
               imageUri: data.imageUri,
             })
@@ -243,8 +244,8 @@ export default function Main() {
       }
     });
     return () => {
-      socket?.off("online");
-      socket?.off("message");
+      socket?.off('online');
+      socket?.off('message');
     };
   }, [socket]);
 
@@ -252,25 +253,25 @@ export default function Main() {
 
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   console.log(
-    "🚀 ~ file: Main.tsx:159 ~ Main ~ appStateVisible:",
+    '🚀 ~ file: Main.tsx:159 ~ Main ~ appStateVisible:',
     appStateVisible
   );
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (
         appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
+        nextAppState === 'active'
       ) {
-        socket?.emit("online");
-        console.log("App has come to the foreground!");
+        socket?.emit('online');
+        console.log('App has come to the foreground!');
       }
 
       appState.current = nextAppState;
       setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
-      if (appState.current === "background") {
-        socket?.emit("away");
+      console.log('AppState', appState.current);
+      if (appState.current === 'background') {
+        socket?.emit('away');
       }
     });
     return () => {
@@ -294,46 +295,46 @@ export default function Main() {
           <Stack.Screen
             name="Profile"
             options={{
-              headerTitle: "",
+              headerTitle: '',
 
-              animation: "none",
+              animation: 'none',
               headerTransparent: true,
-              headerTintColor: "white",
+              headerTintColor: 'white',
             }}
             component={Profile}
           />
           <Stack.Screen
             name="ProfilePeople"
             options={{
-              headerTitle: "",
-              animation: "fade_from_bottom",
+              headerTitle: '',
+              animation: 'fade_from_bottom',
               headerTransparent: true,
-              headerTintColor: "white",
+              headerTintColor: 'white',
             }}
             component={ProfilePeople}
           />
           <Stack.Screen
             name="ImageFullScreen"
             options={{
-              title: "",
-              animation: "fade_from_bottom",
+              title: '',
+              animation: 'fade_from_bottom',
 
               headerTransparent: true,
               headerShadowVisible: false,
-              headerTintColor: "white",
+              headerTintColor: 'white',
             }}
             component={ImageFullScreen}
           />
           <Stack.Screen
             name="PostContent"
             options={{
-              title: "",
+              title: '',
 
               headerShown: false,
-              animation: "fade_from_bottom",
+              animation: 'fade_from_bottom',
               headerTransparent: true,
               headerShadowVisible: false,
-              headerTintColor: "white",
+              headerTintColor: 'white',
             }}
             component={PostContent}
           />
@@ -346,7 +347,7 @@ export default function Main() {
                     <BlurView
                       experimentalBlurMethod="dimezisBlurView"
                       style={{
-                        position: "absolute",
+                        position: 'absolute',
                         bottom: 0,
                         left: 0,
                         top: 0,
@@ -360,7 +361,7 @@ export default function Main() {
                   ) : (
                     <View
                       style={{
-                        position: "absolute",
+                        position: 'absolute',
                         bottom: 0,
                         left: 0,
                         top: 0,
@@ -373,17 +374,17 @@ export default function Main() {
                   )}
                 </>
               ),
-              title: "Chat",
-              animation: "fade_from_bottom",
-              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+              title: 'Chat',
+              animation: 'fade_from_bottom',
+              headerTitleStyle: { fontFamily: 'uberBold', fontSize: 20, color },
               headerShadowVisible: false,
 
               headerTransparent: true,
-              headerTitleAlign: "center",
+              headerTitleAlign: 'center',
               headerTintColor: color,
               headerStyle: {
                 backgroundColor: isHighEndDevice
-                  ? "transparent"
+                  ? 'transparent'
                   : backgroundColor,
               },
             }}
@@ -392,12 +393,12 @@ export default function Main() {
           <Stack.Screen
             name="VideoFullScreen"
             options={{
-              title: "",
-              contentStyle: { backgroundColor: "black" },
-              animation: "fade_from_bottom",
+              title: '',
+              contentStyle: { backgroundColor: 'black' },
+              animation: 'fade_from_bottom',
               headerTransparent: true,
               headerShadowVisible: false,
-              headerTintColor: "white",
+              headerTintColor: 'white',
             }}
             component={VideoFullScreen}
           />
@@ -408,7 +409,7 @@ export default function Main() {
                 <BlurView
                   experimentalBlurMethod="dimezisBlurView"
                   style={{
-                    position: "absolute",
+                    position: 'absolute',
                     bottom: 0,
                     left: 0,
                     top: 0,
@@ -420,17 +421,17 @@ export default function Main() {
                   intensity={200}
                 />
               ),
-              title: "Post",
-              animation: "none",
-              presentation:"modal",
-              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+              title: 'Post',
+              animation: 'none',
+              presentation: 'modal',
+              headerTitleStyle: { fontFamily: 'uberBold', fontSize: 20, color },
               headerShadowVisible: false,
 
               headerTransparent: true,
-              headerTitleAlign: "center",
+              headerTitleAlign: 'center',
               headerTintColor: color,
               headerStyle: {
-                backgroundColor: "transparent",
+                backgroundColor: 'transparent',
               },
             }}
             component={PostScreen}
@@ -438,16 +439,16 @@ export default function Main() {
           <Stack.Screen
             name="FollowingFollowers"
             options={{
-              title: "Follow List",
-              animation: "fade_from_bottom",
-              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+              title: 'Follow List',
+              animation: 'fade_from_bottom',
+              headerTitleStyle: { fontFamily: 'uberBold', fontSize: 20, color },
               headerShadowVisible: false,
 
               headerTransparent: true,
-              headerTitleAlign: "center",
+              headerTitleAlign: 'center',
               headerTintColor: color,
               headerStyle: {
-                backgroundColor: "transparent",
+                backgroundColor: 'transparent',
               },
             }}
             component={FollowingFollowers}
@@ -455,16 +456,16 @@ export default function Main() {
           <Stack.Screen
             name="EditProfile"
             options={{
-              title: "Edit Profile",
-              animation: "none",
-              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+              title: 'Edit Profile',
+              animation: 'none',
+              headerTitleStyle: { fontFamily: 'uberBold', fontSize: 20, color },
               headerShadowVisible: false,
 
               headerTransparent: true,
-              headerTitleAlign: "center",
+              headerTitleAlign: 'center',
               headerTintColor: color,
               headerStyle: {
-                backgroundColor: "transparent",
+                backgroundColor: 'transparent',
               },
             }}
             component={EditProfile}
@@ -474,9 +475,9 @@ export default function Main() {
             component={SearchUsers}
             options={{
               headerTintColor: color,
-              animation: "fade_from_bottom",
+              animation: 'fade_from_bottom',
               headerStyle: { backgroundColor },
-              headerTitle: "",
+              headerTitle: '',
               headerShadowVisible: false,
             }}
           />
@@ -485,9 +486,9 @@ export default function Main() {
             component={ChangeData}
             options={{
               headerTintColor: color,
-              animation: "none",
+              animation: 'none',
               headerStyle: { backgroundColor },
-              headerTitle: "",
+              headerTitle: '',
               headerShadowVisible: false,
             }}
           />

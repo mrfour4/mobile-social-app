@@ -1,20 +1,20 @@
-import { View, Animated as NativeAnimated } from "react-native";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { View, Animated as NativeAnimated, Text } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import PostBuilder from "../../../components/home/post/PostBuilder";
+import PostBuilder from '../../../components/home/post/PostBuilder';
 
-import useGetMode from "../../../hooks/GetMode";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import useGetMode from '../../../hooks/GetMode';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks';
 
-import { ActivityIndicator } from "react-native-paper";
-import { IPost } from "../../../types/api";
+import { ActivityIndicator } from 'react-native-paper';
+import { IPost } from '../../../types/api';
 import {
   useDeletePostByIdMutation,
   useLazyGetMyPostsQuery,
-} from "../../../redux/api/services";
-import { openToast } from "../../../redux/slice/toast/toast";
+} from '../../../redux/api/services';
+import { openToast } from '../../../redux/slice/toast/toast';
 
-import Bio from "../../../components/profile/Bio";
+import Bio from '../../../components/profile/Bio';
 
 export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
   const dark = useGetMode();
@@ -22,7 +22,7 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
   const [posts, setPosts] = useState<IPost[]>([]);
   const authId = useAppSelector((state) => state.user.data?.id);
   const isDark = dark;
-  const color = isDark ? "white" : "black";
+  const color = isDark ? 'white' : 'black';
 
   const [skip, setSkip] = useState(0);
 
@@ -32,20 +32,33 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
   const [getLazyPost, postRes] = useLazyGetMyPostsQuery();
   const [isLoading, setIsLoading] = useState(false);
   console.log(
-    "🚀 ~ file: MyPosts.tsx:30 ~ MyPosts ~ postRes:",
+    '🚀 ~ file: MyPosts.tsx:30 ~ MyPosts ~ postRes:',
     postRes.isLoading
   );
 
   const renderFooter = () => {
+    if (posts.length === 0 && !postRes.isLoading)
+      return (
+        <View
+          style={{
+            marginTop: 20,
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text>No post </Text>
+        </View>
+      );
     if (postRes.isLoading || isLoading) {
       return (
         <View
           style={{
             height: 50,
             marginTop: 20,
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <ActivityIndicator color={color} size={20} />
@@ -70,12 +83,12 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
 
   const fetchMoreData = () => {
     setIsLoading(true);
-    console.log("🔥🔥🔥🔥re fetched");
+    console.log('🔥🔥🔥🔥re fetched');
     if (!noMore && !postRes.error && skip > 0)
       getLazyPost({ take: 10, skip })
         .unwrap()
         .then((e) => {
-          console.log("🚀 ~ file: MyPosts.tsx:73 ~ .then ~ e:", e.posts.length);
+          console.log('🚀 ~ file: MyPosts.tsx:73 ~ .then ~ e:', e.posts.length);
           setIsLoading(false);
           setPosts((prev) => [...prev, ...e.posts]);
           setSkip(skip + e.posts.length);

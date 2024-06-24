@@ -4,8 +4,8 @@ import {
   useColorScheme,
   Pressable,
   StyleSheet,
-} from "react-native";
-import React, { ElementType, Ref, useEffect, useState } from "react";
+} from 'react-native';
+import React, { ElementType, Ref, useEffect, useState } from 'react';
 import Animated, {
   Extrapolate,
   FadeIn,
@@ -15,12 +15,19 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import useGetMode from "../../../../hooks/GetMode";
-import LikeLottie from "../misc/Robot";
-import Lottie from "lottie-react-native";
-import { HeartUnfocused, HeartsFocused, Repost, RepostUnFocused } from "../../../icons";
-import MaterialIcons from "@expo/vector-icons/MaterialCommunityIcons";
+} from 'react-native-reanimated';
+import useGetMode from '../../../../hooks/GetMode';
+import LikeLottie from '../misc/Robot';
+import Lottie from 'lottie-react-native';
+import {
+  HeartUnfocused,
+  HeartsFocused,
+  Repost,
+  RepostUnFocused,
+} from '../../../icons';
+import MaterialIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useAppDispatch } from '../../../../redux/hooks/hooks';
+import { openToast } from '../../../../redux/slice/toast/toast';
 export default function RepostButton({
   isPosted,
   clicked,
@@ -35,11 +42,11 @@ export default function RepostButton({
 }) {
   const dark = useGetMode();
   const isDark = dark;
-  const color = isDark ? "white" : "black";
-  const rColor = isDark ? "#75B8C8" : "#11262C";
-  
+  const color = isDark ? 'white' : 'black';
+  const rColor = isDark ? '#75B8C8' : '#11262C';
 
   const reposted = useSharedValue(isPosted ? 1 : 0);
+  const dispatch = useAppDispatch();
 
   const outlineStyle = useAnimatedStyle(() => {
     return {
@@ -63,21 +70,24 @@ export default function RepostButton({
   return (
     <View
       style={{
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       <Pressable
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           width: 30,
           height: 22,
           gap: 2,
-          alignItems: "center",
+          alignItems: 'center',
         }}
         onPress={() => {
           reposted.value = withSpring(reposted.value ? 0 : 1);
+          dispatch(
+            openToast({ text: 'Successfully Re-posted', type: 'Success' })
+          );
           setReposted(!clicked);
         }}
       >
@@ -96,7 +106,6 @@ export default function RepostButton({
             </>
           }
         </View>
-       
       </Pressable>
     </View>
   );
