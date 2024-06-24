@@ -28,7 +28,7 @@ export default function LikeButton({
   setLiked,
 }: {
   text?: string;
-  setLiked: (isClicked: boolean) => void;
+  setLiked?: (isClicked: boolean) => void;
   isLiked?: boolean;
 }) {
   const dark = useGetMode();
@@ -73,7 +73,7 @@ export default function LikeButton({
         }}
         onPress={() => {
           liked.value = withSpring(liked.value ? 0 : 1);
-          setLiked(liked.value ? false : true);
+          setLiked?.(liked.value ? false : true);
         }}
       >
         <View style={{ width: 18 }}>

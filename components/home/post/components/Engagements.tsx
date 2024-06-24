@@ -1,6 +1,6 @@
-import { View, Text, useColorScheme, Pressable } from "react-native";
-import React, { Ref, useEffect, useRef, useState } from "react";
-import LikeButton from "./LikeButton";
+import { View, Text, useColorScheme, Pressable } from 'react-native';
+import React, { Ref, useEffect, useRef, useState } from 'react';
+import LikeButton from './LikeButton';
 import {
   ActivityUnfocused,
   HeartUnfocused,
@@ -9,13 +9,13 @@ import {
   MessageUnfocused,
   MessagesIcon,
   ShareUnfocused,
-} from "../../../icons";
-import useGetMode from "../../../../hooks/GetMode";
+} from '../../../icons';
+import useGetMode from '../../../../hooks/GetMode';
 import {
   useLazyLikePostQuery,
   useLazyRepostQuery,
-} from "../../../../redux/api/services";
-import RepostButton from "./RepostButton";
+} from '../../../../redux/api/services';
+import RepostButton from './RepostButton';
 
 export default function Engagements({
   title,
@@ -36,44 +36,58 @@ export default function Engagements({
 }) {
   const dark = useGetMode();
   const isDark = dark;
-  const shareColor = isDark ? "#91EC09" : "#639E0B";
+  const shareColor = isDark ? '#91EC09' : '#639E0B';
   const [likeAmount, setLikeAmount] = useState(() => like);
-  const [clicked, setClicked] = useState(() => isLiked);
+  const [liked, setLiked] = useState(() => isLiked);
   const [likePost] = useLazyLikePostQuery();
   const [rePostPost] = useLazyRepostQuery();
 
   const [reposted, setRepost] = useState(() => isReposted);
 
   const handleClicked = (click: boolean) => {
-    setClicked(click);
     likePost({ id });
-    if (!clicked) {
+    if (!liked) {
       setLikeAmount(likeAmount + 1);
     } else {
       setLikeAmount(likeAmount - 1);
     }
+    setLiked(click);
   };
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      if (liked) {
+        setLikeAmount((prev) => prev + 1);
+      } else {
+        setLikeAmount((prev) => prev - 1);
+      }
+    }
+  }, [liked]);
 
   const handleRepost = (repost: boolean) => {
     setRepost(repost);
     rePostPost({ id });
   };
 
-  const color = isDark ? "white" : "black";
+  const color = isDark ? 'white' : 'black';
   return (
     <View
       style={{
-        flexDirection: "row",
+        flexDirection: 'row',
         paddingHorizontal: 20,
 
-        alignItems: "center",
+        alignItems: 'center',
 
         gap: 6,
-        justifyContent: "space-between",
+        justifyContent: 'space-between',
       }}
     >
       {title && <Text>{title}</Text>}
-      <View style={{ flexDirection: "row", gap: 10 }}>
+      <View style={{ flexDirection: 'row', gap: 10 }}>
         {/* <IconWithValue
         animationRef={animationRef}
           IconUnfocused={MessageUnfocused}
@@ -83,10 +97,11 @@ export default function Engagements({
           setClicked={handleClicked}
         /> */}
         <LikeButton
-          isLiked={isLiked}
+          isLiked={liked}
+          setLiked={setLiked}
           text={likeAmount.toString()}
-          clicked={clicked}
-          setClicked={handleClicked}
+          // clicked={clicked}
+          // setClicked={handleClicked}
         />
         <RepostButton
           isPosted={isReposted}
