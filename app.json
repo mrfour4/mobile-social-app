@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "me.isaacojo.qui"
@@ -31,7 +29,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4bee87f2-1c2e-42ba-b697-c3795f641b39"
+        "projectId": "a64a805c-2566-43d8-a72e-a1d54beb6ace"
       }
     },
     "plugins": [
@@ -43,6 +41,6 @@
         }
       ]
     ],
-    "owner": "minhthuong"
+    "owner": "mrfour12369"
   }
 }

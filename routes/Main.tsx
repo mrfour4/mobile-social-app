@@ -157,7 +157,7 @@ export default function Main() {
 
   useEffect(() => {
     socket?.on('connected', (connected) => {
-      // dispatch(openToast({ text: "Connected", type: "Success" }));
+      // dispatch(openToast({ text: 'Connected', type: 'Success' }));
     });
     return () => {
       socket?.off('connected');
@@ -234,8 +234,6 @@ export default function Main() {
           dispatch(
             openToast({
               type: 'Message',
-              message: data?.message,
-              chatId: data?.chatId,
               text: data?.message.text,
               imageUri: data.imageUri,
             })
