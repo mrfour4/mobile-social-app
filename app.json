@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Qui",
-    "slug": "qui",
+    "slug": "mobile-social-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,7 +31,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "e618bb47-6149-4585-8cc8-884c5992795e"
+        "projectId": "a64a805c-2566-43d8-a72e-a1d54beb6ace"
       }
     },
     "plugins": [
@@ -43,6 +43,6 @@
         }
       ]
     ],
-    "owner": "hojoisaac"
+    "owner": "mrfour12369"
   }
 }
